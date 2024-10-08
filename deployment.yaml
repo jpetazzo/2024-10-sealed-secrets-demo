@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: blue
+  name: blue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blue
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: blue
+    spec:
+      volumes:
+      - name: secret-logging
+        secret:
+          secretName: logging
+      - name: secret-database
+        secret:
+          secretName: database
+      containers:
+      - image: jpetazzo/color
+        name: color
+        volumeMounts:
+        - name: secret-logging
+          mountPath: /secrets/logging
+        - name: secret-database
+          mountPath: /secrets/database
